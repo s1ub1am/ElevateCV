@@ -2,7 +2,7 @@
 
 **ElevateCV** is a modern, full-stack resume builder application designed to help job seekers create ATS-optimized, professional resumes in minutes. Built with the MERN stack (MongoDB, Express, React, Node.js), it offers a seamless experience with real-time previews, multiple templates, and PDF export capabilities.
 
-![ElevateCV Preview](./client/public/logo.svg)
+<!--  -->
 
 ## 🚀 Features
 
