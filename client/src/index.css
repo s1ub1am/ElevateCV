@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-white text-slate-900 font-sans antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display font-bold tracking-tight text-slate-900;
+  }
+}
+
+@layer utilities {
+  .glass-panel {
+    @apply bg-white/80 backdrop-blur-md border border-slate-200 shadow-sm;
+  }
+
+  .neon-text {
+    /* Deprecated but kept safe */
+    color: #2563EB;
+  }
+
+  /* Resume System Utilities */
+  .resume-wrapper {
+    width: 210mm;
+    min-height: 297mm;
+    background: white;
+    overflow: visible;
+    /* CRITICAL for export */
+  }
+
+  .page-break-before {
+    page-break-before: always;
+  }
+
+  .no-break-inside {
+    page-break-inside: avoid;
+  }
+}
