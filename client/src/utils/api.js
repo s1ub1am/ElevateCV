@@ -26,8 +26,22 @@ api.interceptors.request.use(
         return config;
     },
     (error) => {
-        return Promise.reject(error);
-    }
-);
+        // Handle 401 (Unauthorized) errors globally
+        api.interceptors.response.use(
+            (response) => {
+                return response;
+            },
+            (error) => {
+                if (error.response && error.response.status === 401) {
+                    // Token is invalid or expired
+                    localStorage.removeItem('token');
+                    // Redirect to home/login if not already there
+                    if (window.location.pathname !== '/') {
+                        window.location.href = '/';
+                    }
+                }
+                return Promise.reject(error);
+            }
+        );
 
-export default api;
+        export default api;
