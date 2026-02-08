@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { CheckCircle, Download, Layout, ArrowRight, Shield, Zap, FileText, Trash2, Edit, Plus } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
-
+import api from '../utils/api';
 const LandingPage = () => {
     const navigate = useNavigate();
     const { isAuthenticated, user, logout } = useAuth();
@@ -20,15 +19,18 @@ const LandingPage = () => {
     const fetchResumes = async () => {
         setLoading(true);
         try {
-            const token = localStorage.getItem('token');
-            const res = await axios.get('http://localhost:5000/api/resumes', {
-                headers: { 'x-auth-token': token }
-            });
+            // Check if token exists before making request
+            if (!localStorage.getItem('token')) {
+                setLoading(false);
+                return;
+            }
+
+            const res = await api.get('/resumes');
             setResumes(res.data.resumes || []);
         } catch (err) {
             console.error('Error fetching resumes:', err);
             if (err.response && err.response.status === 401) {
-                logout();
+                logout(); // Logout on invalid token
             }
         } finally {
             setLoading(false);
@@ -40,10 +42,7 @@ const LandingPage = () => {
         if (!window.confirm('Are you sure you want to delete this resume?')) return;
 
         try {
-            const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:5000/api/resumes/${id}`, {
-                headers: { 'x-auth-token': token }
-            });
+            await api.delete(`/resumes/${id}`);
             setResumes(resumes.filter(r => r._id !== id));
         } catch (err) {
             console.error('Error deleting resume:', err);
@@ -66,7 +65,7 @@ const LandingPage = () => {
                 <div className="flex gap-3 items-center">
                     {isAuthenticated ? (
                         <>
-                            {user?.name && <span className="hidden md:block text-sm text-slate-600">Hi, {user.name}!</span>}
+                            {user?.name && <span className="text-sm text-slate-600 font-medium">Hi, {user.name}!</span>}
                             <button onClick={() => navigate('/templates')} className="px-5 py-2 text-sm font-semibold bg-brand-blue text-white rounded-lg hover:bg-blue-700 transition-all shadow-sm shadow-blue-200 flex items-center gap-2">
                                 <Plus size={16} /> New Resume
                             </button>
